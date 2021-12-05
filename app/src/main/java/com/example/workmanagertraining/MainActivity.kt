@@ -3,42 +3,24 @@ package com.example.workmanagertraining
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.work.*
-import com.example.workmanagertraining.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
 
 
-    private val viewModel: WorkManagerViewModel by viewModels{
-        WorkManagerViewModel.BlurViewModelFactory(
-            application
-        )
-    }
-
-
-    private lateinit var binding: ActivityMainBinding
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        binding.workManagerViewModel = viewModel
+        setContentView(R.layout.activity_main)
+
+
 
         activateWorkRequest(applicationContext)
-    //    workManagerViewModel.setNames("onCreate")
-
-
 
     }
 
 
 }
-
 
 
 class FirstWorkManager(context: Context, parameters: WorkerParameters) :
@@ -47,14 +29,14 @@ class FirstWorkManager(context: Context, parameters: WorkerParameters) :
     override fun doWork(): Result {
         return try {
             var input = inputData.getString("Team_45")
-         //   workManagerViewModel.setNames(input)
-            input = "Khaled, Aymen"
-       //     MainActivity().test(input)
+            println("FirstWorkManager = $input")
 
+
+
+            input = "Khaled, Aymen"
 
             Result.success(workDataOf("Team_45" to input))
         } catch (e: Exception) {
-            println("Failure1")
             Result.failure()
         }
     }
@@ -66,9 +48,13 @@ class SecondWorkManger(context: Context, parameters: WorkerParameters) :
         return try {
             var input = inputData.getString("Team_45")
 
-           // workManagerViewModel.setNames(input)
+            println("SecondWorkManager = $input")
+
+
+
 
             input = "Khaled, Aymen, Rakan"
+
 
             Result.success(workDataOf("Team_45" to input))
         } catch (e: Exception) {
@@ -83,7 +69,10 @@ class ThirdWorkManger(context: Context, parameters: WorkerParameters) :
     override fun doWork(): Result {
         return try {
             var input = inputData.getString("Team_45")
-           // workManagerViewModel.setNames(input)
+            println("ThirdWorkManager = $input")
+
+
+
             input = "Khaled, Aymen, Rakan, Ibrahim"
 
 
@@ -101,7 +90,8 @@ class ForthWorkManger(context: Context, parameters: WorkerParameters) :
     override fun doWork(): Result {
         return try {
             val input = inputData.getString("Team_45")
-        //    workManagerViewModel.setNames(input)
+            println("ThirdWorkManager = $input")
+
 
             Result.success()
         } catch (e: Exception) {
@@ -112,6 +102,8 @@ class ForthWorkManger(context: Context, parameters: WorkerParameters) :
 }
 
 fun activateWorkRequest(context: Context) {
+
+
     val firstWorkManager = OneTimeWorkRequestBuilder<FirstWorkManager>()
         .setInputData(setInput())
         .build()
@@ -139,7 +131,6 @@ fun activateWorkRequest(context: Context) {
     continuation.enqueue()
 
 
-    continuation.enqueue()
 
 }
 
@@ -152,14 +143,5 @@ fun activateWorkRequest(context: Context) {
 
 fun setInput(): Data {
 
-    return Data.Builder().putString("Team_45", "Jana").build()
-}
-
-fun sleep() {
-    try {
-        Thread.sleep(5000, 0)
-    } catch (e: InterruptedException) {
-        Log.e("TAG", e.message.toString())
-    }
-
+    return Data.Builder().putString("Team_45", "Khaled").build()
 }
